@@ -1,0 +1,31 @@
+{
+    "name": "alonskaya/to-do-test-project",
+    "description": "Project for creating and managing to-do lists.",
+    "type": "project",
+    "require": {
+        "php": "^7.2",
+        "doctrine/orm": "^2.6",
+        "doctrine/migrations": "^2.1",
+        "klein/klein": "^2.1",
+        "twig/twig": "^2.11",
+        "twig/extensions": "^1.5",
+        "symfony/twig-bridge": "^4.3",
+        "symfony/form": "^4.3",
+        "symfony/translation": "^4.3",
+        "jasny/auth": "^1.0",
+        "ext-json": "*"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Lonskaya Angelika",
+            "email": "lonskayaa@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

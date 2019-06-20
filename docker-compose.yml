@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: .
+      args:
+        - WITH_XDEBUG=true
+    depends_on:
+      - database
+    volumes:
+      - .:/var/www
+    restart: always
+    entrypoint: /var/www/bootstrap.dev.sh
+    environment:
+      - XDEBUG_CONFIG=remote_host=172.17.0.1
+      - ENV=dev
+      - PHP_OPCACHE=0
+      - APP_SECRET=b6wPJZ5ysEXNB3ZaV9SQe5w68tnsF2bB
+
+  nginx:
+    image: nginx
+    depends_on:
+      - backend
+    restart: always
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./node_modules:/var/www/node_modules
+    ports:
+      - 8888:80
+    environment:
+      - APP_ENTRYPOINT=/var/www/index.php
+      - FPM_UPSTREAM=backend:9000
+
+  database:
+    image: mysql:5.7
+    ports:
+      - 33062:3306
+    volumes:
+      - ./var/db:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=qwerty
+      - MYSQL_DATABASE=to_do
