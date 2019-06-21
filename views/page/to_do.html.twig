@@ -1,10 +1,10 @@
 {% for todo in todos %}
     <li class="{% if todo.done %}completed{% else %}uncompleted{% endif %}">
-        <div class="view" id="{{ todo.id }}"> {# editing completed #}
+        <div class="view" id="{{ todo.id }}">
             <input class="toggle" type="checkbox" {% if todo.done %} checked {% endif %}>
             <label class="title">{{ todo.title }}</label>
             <button class="destroy"></button>
         </div>
-        <input class="edit" value="Rule the web">
+        <input class="edit" value="{{ todo.title }}">
     </li>
 {% endfor %}

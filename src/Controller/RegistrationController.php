@@ -23,7 +23,7 @@ class RegistrationController
      * TODO: handle exceptions
      * TODO: make UserService to use it in another request entry points
      * TODO: show error validation messages
-     * TODO: add email confirmation
+     * TODO: add email confirmation throw mail link
      *
      * @param Request         $request
      * @param Response        $response

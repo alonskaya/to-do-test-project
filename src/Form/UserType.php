@@ -56,7 +56,6 @@ class UserType extends AbstractType
                     'label'          => 'passwords',
                     'first_options'  => ['label' => 'password'],
                     'second_options' => ['label' => 'enter the password again'],
-                    'error_bubbling' => true,
                 ]
             );
     }

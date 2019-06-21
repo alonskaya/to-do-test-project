@@ -24,7 +24,7 @@ class FirewallController
         $auth = $app->__get('auth');
 
         /** TODO: make auth config */
-        if (!in_array($request->pathName(), ['/login', '/register'])) {
+        if (!in_array($request->pathName(), ['/login', '/register', '/logout'])) {
             if (!$auth->user()) {
                 $query = http_build_query(['referrer' => $request->pathName()]);
 

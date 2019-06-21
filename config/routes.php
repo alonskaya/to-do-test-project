@@ -49,6 +49,11 @@ return [
         'route'    => '/api/v1/todos/[i:id]',
         'callback' => 'App\Controller\ToDoController::deleteAction'
     ],
+    'api-todos-cdelete' => [
+        'type'     => 'DELETE',
+        'route'    => '/api/v1/todos',
+        'callback' => 'App\Controller\ToDoController::cDeleteAction'
+    ],
     'api-todos-put' => [
         'type'     => 'PUT',
         'route'    => '/api/v1/todos/[i:id]',

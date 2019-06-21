@@ -13,6 +13,9 @@ use Klein\ServiceProvider;
 use Symfony\Component\Form\FormFactory;
 
 /**
+ * TODO: clear up code
+ * TODO: make correct status codes
+ *
  * Class ToDoController
  * @package App\Controller
  */
@@ -36,10 +39,10 @@ class ToDoController
         /** @var EntityManager $entityManager */
         $entityManager = $app->__get('entityManager');
 
-        $todos = $entityManager->getRepository(ToDoList::class)->findBy(
-            [
-                'author' => $auth->user(),
-            ]
+        $todos = $entityManager->getRepository(ToDoList::class)->findByWithOrder(
+            ['author' => $auth->user()],
+            'id',
+            'DESC'
         );
 
         return $response->json($todos);
@@ -98,16 +101,44 @@ class ToDoController
         /** @var EntityManager $entityManager */
         $entityManager = $app->__get('entityManager');
 
-        if ($data = $request->body()) {
-            $toDo = $entityManager->getRepository(ToDoList::class)->find(
-                $request->param('id')
-            );
+        $toDo = $entityManager->getRepository(ToDoList::class)->find(
+            $request->param('id')
+        );
 
+        $entityManager->remove($toDo);
+        $entityManager->flush();
+
+        return $response->json(json_encode(['status' => 'ok']));
+    }
+
+    /**
+     * @param Request         $request
+     * @param Response        $response
+     * @param ServiceProvider $service
+     * @param App             $app
+     *
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public static function cDeleteAction(Request $request, Response $response, ServiceProvider $service, App $app)
+    {
+        /** @var EntityManager $entityManager */
+        $entityManager = $app->__get('entityManager');
+
+        $data  = json_decode($request->body(), true);
+        $toDos = $entityManager->getRepository(ToDoList::class)->findBy(
+            [
+                'id' => $data,
+            ]
+        );
+
+        foreach ($toDos as $toDo) {
             $entityManager->remove($toDo);
             $entityManager->flush();
-
-            return $response->json(json_encode(['status' => 'ok']));
         }
+
+        return $response->json(json_encode(['status' => 'ok']));
     }
 
     /**

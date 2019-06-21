@@ -23,17 +23,17 @@
             <!-- Remove this if you don't implement routing -->
             <ul class="filters">
                 <li>
-                    <a class="selected" href="/to-do">All</a>
+                    <a class="selected" href="javascript:showAll();">All</a>
                 </li>
                 <li>
-                    <a href="#/active">Active</a>
+                    <a href="javascript:showUncompleted();">Active</a>
                 </li>
                 <li>
-                    <a href="#/completed">Completed</a>
+                    <a href="javascript:showCompleted();">Completed</a>
                 </li>
             </ul>
             <!-- Hidden if no completed items are left ↓ -->
-            <button class="clear-completed">Clear completed</button>
+            <button class="clear-completed" onclick="deleteCompleted();">Clear completed</button>
         </footer>
         <br>
     </section>
