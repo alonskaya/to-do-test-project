@@ -5,6 +5,7 @@ namespace App\Service\Initializer;
 use App\Service\ProjectPathKeeper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use Klein\Klein;
 
 /**
  * Class EntityManagerInitializer
@@ -13,9 +14,11 @@ use Doctrine\ORM\Tools\Setup;
 class EntityManagerInitializer implements ServiceInitializerInterface
 {
     /**
+     * @param Klein $klein
+     *
      * @return callable
      */
-    public static function initService(): callable
+    public static function initService(Klein $klein): callable
     {
         return static function () {
             $config = Setup::createAnnotationMetadataConfiguration(

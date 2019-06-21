@@ -1,0 +1,22 @@
+{% import 'macro/form_childs_renderer.html.twig' as form_childs_renderer %}
+
+{% extends "app.html.twig" %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <section class="todoapp container">
+        <section class="main">
+            {{ form_errors(form) }}
+            {{ form_start(form, {attr: {class: 'form', id: "login-form"}}) }}
+            <div class="form-group">
+                <header class="header"><h3>login:</h3></header>
+                {{ form_childs_renderer.recursive(form) }}
+
+                <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                <span><a href="/register" class="float-sm-right dark-blue">register</a></span>
+            </div>
+            {{ form_end(form) }}
+        </section>
+    </section>
+{% endblock %}

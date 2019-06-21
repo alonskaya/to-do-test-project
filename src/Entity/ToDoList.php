@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * To-do list
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="to_do_list", uniqueConstraints={@ORM\UniqueConstraint(name="to_do_list", columns={"author, title"})}))
  * @ORM\Entity(repositoryClass="App\Repository\ToDoListRepository")
  */
-class ToDoList
+class ToDoList implements JsonSerializable
 {
     /**
      * @var integer|null
@@ -111,5 +112,18 @@ class ToDoList
         $this->author = $author;
 
         return $this;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id'     => $this->getId(),
+            'done'   => $this->getDone(),
+            'title'  => $this->getTitle(),
+            'author' => $this->getAuthor()->getId(),
+        ];
     }
 }

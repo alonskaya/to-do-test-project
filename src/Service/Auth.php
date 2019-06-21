@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Authentication;
+namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
-use Jasny\Auth\Confirmation;
 use Jasny\Auth\Sessions;
 use Jasny\Auth\User as AuthUser;
 
 /**
  * Class Auth
- * @package App\Authentication
+ * @package App\Service
  */
 class Auth extends \Jasny\Auth
 {
     use Sessions;
-    use Confirmation;
 
     /**
      * @var EntityManager
@@ -56,13 +54,5 @@ class Auth extends \Jasny\Auth
         return $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $username,
         ]);
-    }
-
-    /**
-     * @return array|false|string
-     */
-    public function getConfirmationSecret()
-    {
-        return getenv('APP_SECRET');
     }
 }

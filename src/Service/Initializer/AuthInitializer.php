@@ -2,7 +2,8 @@
 
 namespace App\Service\Initializer;
 
-use Symfony\Component\Form\Forms;
+use App\Service\Auth;
+use Klein\Klein;
 
 /**
  * Class AuthInitializer
@@ -11,28 +12,14 @@ use Symfony\Component\Form\Forms;
 class AuthInitializer implements ServiceInitializerInterface
 {
     /**
+     * @param Klein $klein
+     *
      * @return callable
      */
-    public static function initService(): callable
+    public static function initService(Klein $klein): callable
     {
-        return static function () {
-            /*
-            $klein->respond('*', function ($request, Response $response, $service, $app) {
-/** @var Auth $auth *
-            $auth = $app->__get('auth');
-
-            if (!in_array($request->pathName(), ['/login', '/register'])) {
-                if (!$auth->user()) {
-                    $query = http_build_query(
-                        [
-                            'referrer' => $request->pathName(),
-                        ]
-                    );
-                    $response->redirect('login?' . $query)->send();
-                }
-            }
-        });
-            */
+        return static function () use ($klein) {
+            return new Auth($klein->app()->__get('entityManager'));
         };
     }
 }

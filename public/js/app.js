@@ -1,13 +1,14 @@
-$(document).ready(function() {
+$(document).ready(function () {
     /* --------------------------------------------- Functions --------------------------------------------- */
-    function sendAJAX(url, data, dataType, onSuccess, onError = function (data, textStatus, errorThrown) {
+    function sendAJAX(url, data, dataType, method = 'POST', onSuccess = function () {
+    }, onError = function (data, textStatus, errorThrown) {
         console.log(data);
         console.log(textStatus);
         console.log(errorThrown);
     }) {
         $.ajax({
             url: url,
-            method: "POST",
+            method: method,
             dataType: dataType,
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
@@ -17,8 +18,21 @@ $(document).ready(function() {
     }
 
     function refreshList() {
-        sendAJAX('to-do/ajax', {}, "html", function (data) {
-            $('#dynamic-todo-list').html( data );
+        sendAJAX('todos', {}, "html", 'POST', function (data) {
+            $('#dynamic-todo-list').html(data);
+
+            footer = $('.footer');
+            main   = $('.main');
+
+            $('#todosCount').html($('.todo-list .uncompleted').length);
+
+            if (data.length === 0) {
+                footer.addClass('hidden');
+                main.addClass('hidden');
+            } else {
+                footer.removeClass('hidden');
+                main.removeClass('hidden');
+            }
         });
     }
 
@@ -32,11 +46,10 @@ $(document).ready(function() {
             return;
         }
 
-        sendAJAX('to-do/create', {title: val}, "json", function (data) {
+        sendAJAX('api/v1/todos', {title: val}, "json", 'POST', function (data) {
             refreshList();
+            input.val('');
         });
-
-        input.val('');
     });
 
     $('.todo-list').on('click', '.destroy', function (e) {
@@ -44,7 +57,7 @@ $(document).ready(function() {
 
         todoId = button.parent().attr('id');
 
-        sendAJAX('to-do/remove', {id: todoId}, "json", function (data) {
+        sendAJAX('api/v1/todos/' + todoId, {}, "json", 'DELETE', function (data) {
             refreshList();
         });
     });
@@ -55,11 +68,11 @@ $(document).ready(function() {
         todoId    = toggle.parent().attr('id');
         todoTitle = toggle.parent().children('.title').text().trim();
 
-        sendAJAX('to-do/edit', {
+        sendAJAX('api/v1/todos/' + todoId, {
             id: todoId,
             done: toggle.is(':checked'),
             title: todoTitle
-        }, "json", function (data) {
+        }, "json", 'PUT', function (data) {
             refreshList();
         });
     });

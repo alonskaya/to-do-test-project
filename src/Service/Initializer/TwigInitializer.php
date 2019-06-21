@@ -3,6 +3,7 @@
 namespace App\Service\Initializer;
 
 use App\Service\ProjectPathKeeper;
+use Klein\Klein;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
@@ -20,9 +21,11 @@ use Symfony\Bridge\Twig\AppVariable;
 class TwigInitializer implements ServiceInitializerInterface
 {
     /**
+     * @param Klein $klein
+     *
      * @return callable
      */
-    public static function initService(): callable
+    public static function initService(Klein $klein): callable
     {
         return static function() {
             $twig = new Environment(

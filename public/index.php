@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\Initializer\RoutesInitializer;
 use Klein\Klein;
 use Klein\Request;
 
@@ -17,14 +18,14 @@ session_start();
 $klein   = new Klein();
 $request = Request::createFromGlobals();
 
+// Init global lazy-loading services
 $services = (include __DIR__ . '/../config/services.php');
 
 foreach ($services as $serviceName => $serviceClass) {
-    $klein->app()->register($serviceName, call_user_func([$serviceClass, 'initService']));
+    $klein->app()->register($serviceName, call_user_func([$serviceClass, 'initService'], $klein));
 }
 
-/*$klein->app()->register('auth', function () use ($klein) {
-    return new Auth($klein->app()->__get('entityManager'));
-});*/
+// Init routes
+RoutesInitializer::init($klein);
 
 $klein->dispatch($request);

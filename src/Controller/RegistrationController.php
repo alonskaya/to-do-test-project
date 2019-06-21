@@ -2,24 +2,16 @@
 
 namespace App\Controller;
 
-use App\Authentication\Auth;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\Auth;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Klein\App;
 use Klein\Request;
 use Klein\Response;
 use Klein\ServiceProvider;
-use Symfony\Bridge\Twig\Extension\FormExtension;
-use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormRenderer;
-use Symfony\Component\Form\Forms;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\RuntimeLoader\FactoryRuntimeLoader;
 
 /**
  * Class RegistrationController
@@ -27,7 +19,25 @@ use Twig\RuntimeLoader\FactoryRuntimeLoader;
  */
 class RegistrationController
 {
-    public static function action(Request $request, Response $response, ServiceProvider $service, App $app)
+    /**
+     * TODO: handle exceptions
+     * TODO: make UserService to use it in another request entry points
+     * TODO: show error validation messages
+     * TODO: add email confirmation
+     *
+     * @param Request         $request
+     * @param Response        $response
+     * @param ServiceProvider $service
+     * @param App             $app
+     *
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public static function registerAction(Request $request, Response $response, ServiceProvider $service, App $app)
     {
         /** @var FormFactory $formFactory */
         $formFactory   = $app->__get('formFactory');
@@ -42,7 +52,6 @@ class RegistrationController
         $form = $formFactory->create(UserType::class, $user);
 
         if ($formData = $request->paramsPost()->get('user')) {
-
             $form->submit($formData);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -53,9 +62,7 @@ class RegistrationController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $response->body(123);
-
-                return $response;
+                $response->redirect('/login')->send();
             }
         }
 

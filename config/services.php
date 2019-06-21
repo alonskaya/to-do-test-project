@@ -1,5 +1,13 @@
 <?php
 
+use App\Service\Initializer\AuthInitializer;
+use App\Service\Initializer\EntityManagerInitializer;
+use App\Service\Initializer\FormFactoryInitializer;
+use App\Service\Initializer\TwigInitializer;
+
 return [
-    'entityManager' => 'App\\Service\\Initializer\\EntityManagerInitializer',
+    'entityManager'   => EntityManagerInitializer::class,
+    'formFactory'     => FormFactoryInitializer::class,
+    'twigEnvironment' => TwigInitializer::class,
+    'auth'            => AuthInitializer::class,
 ];

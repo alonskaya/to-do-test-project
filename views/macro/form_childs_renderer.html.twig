@@ -1,0 +1,16 @@
+{% macro recursive(form) %}
+    {% import _self as form_childs_renderer %}
+
+        {% for child in form.children %}
+            {% if child.vars.name != '_token' %}
+                {% if child.children is not empty %}
+                    {{ form_childs_renderer.recursive(child) }}
+                {% else %}
+                    <div>
+                        <label for="{{ child.vars.name }}">{{ child.vars.label }}:</label>
+                        {{ form_widget(child, {attr: {class: "form-control", id: child.vars.name }}) }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+{% endmacro %}
